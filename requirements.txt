@@ -1,7 +1,13 @@
 # VRChat Voice Translation Software Dependencies
+# Compatible with lower CUDA versions (CUDA 10.2+)
+
+# Core PyTorch with CUDA 11.7 support (compatible with CUDA 10.2+)
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+torchaudio==2.5.1+cu121
+--index-url https://download.pytorch.org/whl/cu117
 
 # Core dependencies
-torch>=2.0.0
 numpy>=1.24.0
 
 # Speech transcription

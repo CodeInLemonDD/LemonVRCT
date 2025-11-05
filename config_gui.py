@@ -61,7 +61,7 @@ class BilingualText:
                 # 日志消息
                 "interface_started": "配置界面已启动",
                 "config_loaded": "配置已加载到界面",
-                "config_saved": "配置已保存到.env文件",
+                "config_saved": "配置已保存到.env文件，请完全退出该程序重新加载",
                 "config_save_failed": "保存配置失败",
                 "default_reset": "已重置为默认配置",
                 # 消息框
@@ -101,7 +101,7 @@ class BilingualText:
                 # 日志消息
                 "interface_started": "Configuration interface started",
                 "config_loaded": "Configuration loaded to interface",
-                "config_saved": "Configuration saved to .env file",
+                "config_saved": "Configuration saved to .env file.Please completely exit the program and reload it.",
                 "config_save_failed": "Failed to save configuration",
                 "default_reset": "Default configuration reset",
                 # 消息框
@@ -213,7 +213,7 @@ class ConfigGUI:
         """设置图形界面"""
         # 创建主框架
         main_frame = ttk.Frame(self.root, padding="10")
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        main_frame.pack(fill="both", expand=True)
         
         # 标题
         title_label = ttk.Label(main_frame, text=self.text_manager.get("window_title"), font=("Arial", 14, "bold"))
@@ -222,8 +222,8 @@ class ConfigGUI:
         # 语言切换按钮
         lang_frame = ttk.Frame(main_frame)
         lang_frame.pack(pady=(0, 10))
-        ttk.Button(lang_frame, text="English", command=lambda: self.switch_language("en")).pack(side=tk.LEFT, padx=(0, 5))
-        ttk.Button(lang_frame, text="中文", command=lambda: self.switch_language("zh")).pack(side=tk.LEFT)
+        ttk.Button(lang_frame, text="English", command=lambda: self.switch_language("en")).pack(side="left", padx=(0, 5))
+        ttk.Button(lang_frame, text="中文", command=lambda: self.switch_language("zh")).pack(side="left")
         
         # 配置区域
         self.setup_config_section(main_frame)
@@ -275,113 +275,112 @@ class ConfigGUI:
     def setup_config_section(self, parent):
         """设置配置区域"""
         self.config_frame = ttk.LabelFrame(parent, text=self.text_manager.get("config_frame"), padding="10")
-        self.config_frame.pack(fill=tk.X, pady=(0, 10))
+        self.config_frame.pack(fill="x", pady=(0, 10))
         
         # 源语言
         self.source_lang_label = ttk.Label(self.config_frame, text=self.text_manager.get("source_language"))
-        self.source_lang_label.grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
+        self.source_lang_label.grid(row=0, column=0, sticky="w", padx=(0, 5))
         self.source_lang_combo = ttk.Combobox(self.config_frame, values=["zh", "en", "ja", "ko", "fr", "de", "es", "ru"], width=10)
-        self.source_lang_combo.grid(row=0, column=1, sticky=tk.W)
+        self.source_lang_combo.grid(row=0, column=1, sticky="w")
         
         # 目标语言
         self.target_lang_label = ttk.Label(self.config_frame, text=self.text_manager.get("target_languages"))
-        self.target_lang_label.grid(row=1, column=0, sticky=tk.W, padx=(0, 5))
+        self.target_lang_label.grid(row=1, column=0, sticky="w", padx=(0, 5))
         self.target_lang_vars = {}
         
         for i, lang in enumerate(["en", "ja", "ko", "fr", "de", "es", "ru"]):
             var = tk.BooleanVar()
             self.target_lang_vars[lang] = var
             cb = ttk.Checkbutton(self.config_frame, text=lang, variable=var)
-            cb.grid(row=1 + i//4, column=2 + i%4, sticky=tk.W, padx=(5, 5))
+            cb.grid(row=1 + i//4, column=2 + i%4, sticky="w", padx=(5, 5))
         
         # 音频设备选择
         self.microphone_label = ttk.Label(self.config_frame, text=self.text_manager.get("microphone_device"))
-        self.microphone_label.grid(row=3, column=0, sticky=tk.W, padx=(0, 5))
+        self.microphone_label.grid(row=3, column=0, sticky="w", padx=(0, 5))
         self.audio_device_combo = ttk.Combobox(self.config_frame, values=self.text_manager.get("device_options"), width=20)
-        self.audio_device_combo.grid(row=3, column=1, sticky=tk.W)
+        self.audio_device_combo.grid(row=3, column=1, sticky="w")
         
         # 语音识别模型大小
         self.whisper_label = ttk.Label(self.config_frame, text=self.text_manager.get("whisper_model"))
-        self.whisper_label.grid(row=4, column=0, sticky=tk.W, padx=(0, 5))
+        self.whisper_label.grid(row=4, column=0, sticky="w", padx=(0, 5))
         self.whisper_model_combo = ttk.Combobox(self.config_frame, values=["tiny", "base", "small", "medium", "large-v3", "large-v3-turbo"], width=15)
-        self.whisper_model_combo.grid(row=4, column=1, sticky=tk.W)
+        self.whisper_model_combo.grid(row=4, column=1, sticky="w")
         
         # API配置
         self.api_url_label = ttk.Label(self.config_frame, text=self.text_manager.get("api_url"))
-        self.api_url_label.grid(row=5, column=0, sticky=tk.W, padx=(0, 5))
+        self.api_url_label.grid(row=5, column=0, sticky="w", padx=(0, 5))
         self.api_base_url_entry = ttk.Entry(self.config_frame, width=30)
-        self.api_base_url_entry.grid(row=5, column=1, columnspan=3, sticky=tk.W)
+        self.api_base_url_entry.grid(row=5, column=1, columnspan=3, sticky="w")
         
         self.api_key_label = ttk.Label(self.config_frame, text=self.text_manager.get("api_key"))
-        self.api_key_label.grid(row=6, column=0, sticky=tk.W, padx=(0, 5))
+        self.api_key_label.grid(row=6, column=0, sticky="w", padx=(0, 5))
         self.api_key_entry = ttk.Entry(self.config_frame, width=30, show="*")
-        self.api_key_entry.grid(row=6, column=1, columnspan=3, sticky=tk.W)
-        
+        self.api_key_entry.grid(row=6, column=1, columnspan=3, sticky="w")
         self.api_model_label = ttk.Label(self.config_frame, text=self.text_manager.get("api_model"))
-        self.api_model_label.grid(row=7, column=0, sticky=tk.W, padx=(0, 5))
+        self.api_model_label.grid(row=7, column=0, sticky="w", padx=(0, 5))
         self.api_model_entry = ttk.Entry(self.config_frame, width=30)
-        self.api_model_entry.grid(row=7, column=1, columnspan=3, sticky=tk.W)
+        self.api_model_entry.grid(row=7, column=1, columnspan=3, sticky="w")
         
         # OSC配置
         self.osc_address_label = ttk.Label(self.config_frame, text=self.text_manager.get("osc_address"))
-        self.osc_address_label.grid(row=8, column=0, sticky=tk.W, padx=(0, 5))
+        self.osc_address_label.grid(row=8, column=0, sticky="w", padx=(0, 5))
         self.osc_ip_entry = ttk.Entry(self.config_frame, width=15)
-        self.osc_ip_entry.grid(row=8, column=1, sticky=tk.W)
+        self.osc_ip_entry.grid(row=8, column=1, sticky="w")
         
         self.osc_port_label = ttk.Label(self.config_frame, text=self.text_manager.get("osc_port"))
-        self.osc_port_label.grid(row=8, column=2, sticky=tk.W, padx=(10, 5))
+        self.osc_port_label.grid(row=8, column=2, sticky="w", padx=(10, 5))
         self.osc_port_entry = ttk.Entry(self.config_frame, width=8)
-        self.osc_port_entry.grid(row=8, column=3, sticky=tk.W)
+        self.osc_port_entry.grid(row=8, column=3, sticky="w")
         
         # 快捷键配置
         self.hotkey_label = ttk.Label(self.config_frame, text=self.text_manager.get("hotkey"))
-        self.hotkey_label.grid(row=9, column=0, sticky=tk.W, padx=(0, 5))
+        self.hotkey_label.grid(row=9, column=0, sticky="w", padx=(0, 5))
         self.hotkey_entry = ttk.Entry(self.config_frame, width=5)
-        self.hotkey_entry.grid(row=9, column=1, sticky=tk.W)
+        self.hotkey_entry.grid(row=9, column=1, sticky="w")
         
         # 音频参数
         self.audio_chunk_label = ttk.Label(self.config_frame, text=self.text_manager.get("audio_chunk"))
-        self.audio_chunk_label.grid(row=10, column=0, sticky=tk.W, padx=(0, 5))
+        self.audio_chunk_label.grid(row=10, column=0, sticky="w", padx=(0, 5))
         self.audio_chunk_entry = ttk.Entry(self.config_frame, width=10)
-        self.audio_chunk_entry.grid(row=10, column=1, sticky=tk.W)
+        self.audio_chunk_entry.grid(row=10, column=1, sticky="w")
         
         self.audio_rate_label = ttk.Label(self.config_frame, text=self.text_manager.get("audio_rate"))
-        self.audio_rate_label.grid(row=10, column=2, sticky=tk.W, padx=(10, 5))
+        self.audio_rate_label.grid(row=10, column=2, sticky="w", padx=(10, 5))
         self.audio_rate_entry = ttk.Entry(self.config_frame, width=10)
-        self.audio_rate_entry.grid(row=10, column=3, sticky=tk.W)
+        self.audio_rate_entry.grid(row=10, column=3, sticky="w")
         
         self.audio_channels_label = ttk.Label(self.config_frame, text=self.text_manager.get("audio_channels"))
-        self.audio_channels_label.grid(row=11, column=0, sticky=tk.W, padx=(0, 5))
+        self.audio_channels_label.grid(row=11, column=0, sticky="w", padx=(0, 5))
         self.audio_channels_entry = ttk.Entry(self.config_frame, width=10)
-        self.audio_channels_entry.grid(row=11, column=1, sticky=tk.W)
+        self.audio_channels_entry.grid(row=11, column=1, sticky="w")
         
         # 日志级别
         self.log_level_label = ttk.Label(self.config_frame, text=self.text_manager.get("log_level"))
-        self.log_level_label.grid(row=11, column=2, sticky=tk.W, padx=(10, 5))
+        self.log_level_label.grid(row=11, column=2, sticky="w", padx=(10, 5))
         self.log_level_combo = ttk.Combobox(self.config_frame, values=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], width=10)
-        self.log_level_combo.grid(row=11, column=3, sticky=tk.W)
+        self.log_level_combo.grid(row=11, column=3, sticky="w")
         
         # 按钮区域
         button_frame = ttk.Frame(self.config_frame)
         button_frame.grid(row=12, column=0, columnspan=4, pady=(10, 0))
         
         self.save_button = ttk.Button(button_frame, text=self.text_manager.get("save_config"), command=self.save_config)
-        self.save_button.pack(side=tk.LEFT, padx=(0, 10))
+        self.save_button.pack(side="left", padx=(0, 10))
         
         self.reload_button = ttk.Button(button_frame, text=self.text_manager.get("reload_config"), command=self.load_current_config)
-        self.reload_button.pack(side=tk.LEFT, padx=(0, 10))
+        self.reload_button.pack(side="left", padx=(0, 10))
         
         self.reset_button = ttk.Button(button_frame, text=self.text_manager.get("reset_default"), command=self.reset_default)
-        self.reset_button.pack(side=tk.LEFT)
+        self.reset_button.pack(side="left")
         
     def setup_log_section(self, parent):
         """设置日志显示区域"""
         self.log_frame = ttk.LabelFrame(parent, text=self.text_manager.get("log_frame"), padding="10")
-        self.log_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        self.log_frame.pack(fill="both", expand=True, pady=(0, 10))
         
         # 日志文本框
-        self.log_text = scrolledtext.ScrolledText(self.log_frame, height=8, wrap=tk.WORD)
-        self.log_text.pack(fill=tk.BOTH, expand=True)
+        self.log_text = scrolledtext.ScrolledText(self.log_frame, height=8, wrap="word")
+        self.log_text.pack(fill="both", expand=True)
         
         # 清空日志按钮
         self.clear_logs_button = ttk.Button(self.log_frame, text=self.text_manager.get("clear_logs"), command=self.clear_logs)
@@ -417,34 +416,34 @@ class ConfigGUI:
             self.whisper_model_combo.set(self.config_manager.get("WHISPER_MODEL", "large-v3-turbo"))
             
             # API配置
-            self.api_base_url_entry.delete(0, tk.END)
+            self.api_base_url_entry.delete(0, "end")
             self.api_base_url_entry.insert(0, self.config_manager.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"))
             
-            self.api_key_entry.delete(0, tk.END)
+            self.api_key_entry.delete(0, "end")
             self.api_key_entry.insert(0, self.config_manager.get("DEEPSEEK_API_KEY", ""))
             
-            self.api_model_entry.delete(0, tk.END)
+            self.api_model_entry.delete(0, "end")
             self.api_model_entry.insert(0, self.config_manager.get("DEEPSEEK_MODEL", "deepseek-chat"))
             
             # OSC配置
-            self.osc_ip_entry.delete(0, tk.END)
+            self.osc_ip_entry.delete(0, "end")
             self.osc_ip_entry.insert(0, self.config_manager.get("OSC_IP", "127.0.0.1"))
             
-            self.osc_port_entry.delete(0, tk.END)
+            self.osc_port_entry.delete(0, "end")
             self.osc_port_entry.insert(0, self.config_manager.get("OSC_PORT", "9000"))
             
             # 快捷键
-            self.hotkey_entry.delete(0, tk.END)
+            self.hotkey_entry.delete(0, "end")
             self.hotkey_entry.insert(0, self.config_manager.get("HOTKEY", "k"))
             
             # 音频参数
-            self.audio_chunk_entry.delete(0, tk.END)
+            self.audio_chunk_entry.delete(0, "end")
             self.audio_chunk_entry.insert(0, self.config_manager.get("AUDIO_CHUNK", "1024"))
             
-            self.audio_rate_entry.delete(0, tk.END)
+            self.audio_rate_entry.delete(0, "end")
             self.audio_rate_entry.insert(0, self.config_manager.get("AUDIO_RATE", "16000"))
             
-            self.audio_channels_entry.delete(0, tk.END)
+            self.audio_channels_entry.delete(0, "end")
             self.audio_channels_entry.insert(0, self.config_manager.get("AUDIO_CHANNELS", "1"))
             
             # 日志级别
@@ -510,12 +509,12 @@ class ConfigGUI:
     
     def clear_logs(self):
         """清空日志"""
-        self.log_text.delete(1.0, tk.END)
+        self.log_text.delete(1.0, "end")
     
     def log_message(self, message):
         """添加日志消息"""
-        self.log_text.insert(tk.END, f"{time.strftime('%H:%M:%S')} - {message}\n")
-        self.log_text.see(tk.END)
+        self.log_text.insert("end", f"{time.strftime('%H:%M:%S')} - {message}\n")
+        self.log_text.see("end")
     
     def run(self):
         """运行界面"""

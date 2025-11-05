@@ -167,14 +167,59 @@ class VRChatTranslator:
         """加载Whisper模型"""
         try:
             self.logger.info(f"正在加载Whisper模型: {self.model_size}")
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+            
+            # 尝试检测CUDA可用性，如果失败则回退到CPU
+            device = self.detect_device()
             self.logger.info(f"使用设备: {device}")
             
             self.model = whisper.load_model(self.model_size, device=device)
             self.logger.info("Whisper模型加载成功")
         except Exception as e:
             self.logger.error(f"模型加载失败: {e}")
-            raise
+            # 如果CUDA加载失败，尝试使用CPU
+            try:
+                self.logger.info("尝试使用CPU加载模型...")
+                self.model = whisper.load_model(self.model_size, device="cpu")
+                self.logger.info("Whisper模型在CPU上加载成功")
+            except Exception as cpu_error:
+                self.logger.error(f"CPU模型加载也失败: {cpu_error}")
+                raise
+    
+    def detect_device(self):
+        """检测可用的设备，优先使用CUDA，如果失败则回退到CPU"""
+        try:
+            # 首先检查是否有CUDA设备
+            if torch.cuda.is_available():
+                # 检查CUDA版本和驱动
+                cuda_version = torch.version.cuda
+                self.logger.info(f"检测到CUDA版本: {cuda_version}")
+                
+                # 检查是否有可用的GPU
+                if torch.cuda.device_count() > 0:
+                    # 获取第一个GPU的信息
+                    gpu_name = torch.cuda.get_device_name(0)
+                    self.logger.info(f"检测到GPU: {gpu_name}")
+                    
+                    # 检查GPU内存
+                    gpu_memory = torch.cuda.get_device_properties(0).total_memory / (1024**3)  # GB
+                    self.logger.info(f"GPU内存: {gpu_memory:.1f} GB")
+                    
+                    # 对于大型模型，确保有足够的内存
+                    if self.model_size in ["large-v3", "large-v3-turbo"] and gpu_memory < 8:
+                        self.logger.warning(f"GPU内存可能不足，建议使用较小的模型或CPU")
+                        return "cuda"  # 仍然尝试使用CUDA
+                    
+                    return "cuda"
+                else:
+                    self.logger.warning("没有检测到可用的GPU设备")
+                    return "cpu"
+            else:
+                self.logger.info("CUDA不可用，使用CPU")
+                return "cpu"
+                
+        except Exception as e:
+            self.logger.warning(f"CUDA检测失败: {e}，回退到CPU")
+            return "cpu"
     
     def setup_openai_client(self):
         """设置OpenAI客户端（用于DeepSeek）"""
