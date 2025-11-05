@@ -1,0 +1,30 @@
+# VRChat Voice Translation Software Dependencies
+
+# Core dependencies
+torch>=2.0.0
+numpy>=1.24.0
+
+# Speech transcription
+openai-whisper>=20231117
+
+# Audio recording
+pyaudio>=0.2.11
+
+# Global hotkey listening
+pynput>=1.7.6
+
+# OSC communication
+python-osc>=1.8.2
+
+# OpenAI API client
+openai>=1.3.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# GUI interface
+ttkbootstrap>=1.10.1
+
+# Note: The following libraries are Python standard libraries and do not need to be installed:
+# - os, sys, io, time, threading, queue, json, re, logging, subprocess
+# - asyncio, argparse, tkinter (Python standard library)
